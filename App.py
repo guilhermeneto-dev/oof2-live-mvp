@@ -1,4 +1,3 @@
-
 import streamlit as st
 import cv2
 import numpy as np
@@ -18,7 +17,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# --- 2. DICIONÁRIO DE IDIOMAS (PT-BR, EN, ES) ---
+# --- 2. DICIONÁRIO DE IDIOMAS (PT, EN, ES, ZH, RU) ---
 locales = {
     "PT": {
         "title": "⚙️ OOF2 Live: Arquitetura ICME",
@@ -100,6 +99,60 @@ locales = {
         "export_title": "### Reporte de Ingeniería Integrada",
         "btn_download": "📥 Descargar Tensor de Daño (CSV)",
         "waiting": "Esperando la carga de la micrografía para inicializar el mapeo..."
+    },
+    "ZH": {
+        "title": "⚙️ OOF2 Live: ICME 架构",
+        "subtitle": "结合 JARVIS-DFT (NIST) 的自主网格生成",
+        "sidebar_lang": "🌐 界面语言",
+        "jarvis_toggle": "启用 NIST JARVIS-DFT 连接",
+        "jarvis_input": "搜索化学式 (例如: Fe4N, Ti, Al):",
+        "jarvis_success": "发现材料",
+        "jarvis_error": "在 DFT 数据库中未找到材料。",
+        "sidebar_param": "分割参数",
+        "threshold": "视觉阈值 (Threshold)",
+        "custom_e": "原始杨氏模量 (GPa)",
+        "custom_m": "损伤敏感性系数 (m)",
+        "upload": "上传显微照片 (FDM 或 SEM)",
+        "metrics_title": "### 微观结构完整性诊断",
+        "m_porosity": "提取的孔隙率",
+        "m_porosity_d": "体积缺陷",
+        "m_young": "有效杨氏模量",
+        "m_young_d": "刚度损失",
+        "m_nodes": "网格复杂性",
+        "m_nodes_d": "生成的节点",
+        "img_raw": "**1. 原始微观结构**",
+        "img_bin": "**2. 孤立缺陷相**",
+        "img_mesh": "**3. 数字孪生 (OOF2)**",
+        "export_title": "### 综合工程报告",
+        "btn_download": "📥 下载损伤张量 (CSV)",
+        "waiting": "等待微观照片上传以初始化映射..."
+    },
+    "RU": {
+        "title": "⚙️ OOF2 Live: Архитектура ICME",
+        "subtitle": "Автономная генерация сетки совместно с JARVIS-DFT (NIST)",
+        "sidebar_lang": "🌐 Язык интерфейса",
+        "jarvis_toggle": "Включить подключение NIST JARVIS-DFT",
+        "jarvis_input": "Поиск формулы (напр. Fe4N, Ti, Al):",
+        "jarvis_success": "Материал найден",
+        "jarvis_error": "Материал не найден в базе данных DFT.",
+        "sidebar_param": "Параметры сегментации",
+        "threshold": "Визуальный порог (Threshold)",
+        "custom_e": "Исходный модуль Юнга (ГПа)",
+        "custom_m": "Коэффициент чувствительности к повреждениям (m)",
+        "upload": "Загрузите микрофотографию (FDM или SEM)",
+        "metrics_title": "### Диагностика микроструктурной целостности",
+        "m_porosity": "Извлеченная пористость",
+        "m_porosity_d": "Объемный дефект",
+        "m_young": "Эффективный модуль Юнга",
+        "m_young_d": "Потеря жесткости",
+        "m_nodes": "Сложность сетки",
+        "m_nodes_d": "Сгенерированные узлы",
+        "img_raw": "**1. Исходная микроструктура**",
+        "img_bin": "**2. Изолированная фаза дефекта**",
+        "img_mesh": "**3. Цифровой двойник (OOF2)**",
+        "export_title": "### Интегрированный инженерный отчет",
+        "btn_download": "📥 Скачать тензор повреждений (CSV)",
+        "waiting": "Ожидание загрузки микрофотографии для инициализации отображения..."
     }
 }
 
@@ -107,8 +160,14 @@ locales = {
 st.sidebar.markdown("**🌐 Idioma / Language**")
 selected_lang_code = st.sidebar.selectbox(
     "",
-    ["PT", "EN", "ES"],
-    format_func=lambda x: {"PT": "🇧🇷 Português", "EN": "🇺🇸 English", "ES": "🇪🇸 Español"}[x]
+    ["PT", "EN", "ES", "ZH", "RU"],
+    format_func=lambda x: {
+        "PT": "🇧🇷 Português", 
+        "EN": "🇺🇸 English", 
+        "ES": "🇪🇸 Español",
+        "ZH": "🇨🇳 中文 (Mandarim)",
+        "RU": "🇷🇺 Русский (Russo)"
+    }[x]
 )
 t = locales[selected_lang_code]
 
@@ -225,7 +284,7 @@ else:
 st.markdown(
     """
     <div class="footer">
-        <b>Desenvolvido por:</b> Guilherme Fernandes Neto | <b>PPGEMec - UFSCar</b>
+        <b>Desenvolvedor:</b> Guilherme Fernandes Neto | <b>PPGEMec - UFSCar</b>
     </div>
     """,
     unsafe_allow_html=True
