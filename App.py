@@ -1,4 +1,3 @@
-
 import streamlit as st
 import cv2
 import numpy as np
@@ -17,16 +16,16 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# --- 2. DICIONÁRIO DE IDIOMAS ---
+# --- 2. DICIONÁRIO DE IDIOMAS (PT e EN) ---
 locales = {
     "PT": {
         "title": "⚙️ OOF2 Live: Arquitetura ICME",
         "subtitle": "Geração Autónoma de Malha Acoplada ao JARVIS-DFT (NIST)",
         "sidebar_lang": "🌐 Idioma da Interface",
-        "jarvis_toggle": "Ativar Conexão NIST JARVIS-DFT",
-        "jarvis_input": "Buscar Fórmula (ex: Fe4N, Ti, Al):",
+        "jarvis_toggle": "Ativar Ligação NIST JARVIS-DFT",
+        "jarvis_input": "Pesquisar Fórmula (ex: Fe4N, Ti, Al):",
         "jarvis_success": "Material Encontrado",
-        "jarvis_error": "Material não encontrado no recorte DFT.",
+        "jarvis_error": "Material não encontrado na base de dados DFT.",
         "sidebar_param": "Parâmetros de Segmentação",
         "threshold": "Limiar (Threshold) Visual",
         "custom_e": "Módulo de Young Original (GPa)",
@@ -44,7 +43,7 @@ locales = {
         "img_mesh": "**3. Gémeo Digital (OOF2)**",
         "export_title": "### Relatório de Engenharia Integrada",
         "btn_download": "📥 Descarregar Tensor (CSV)",
-        "waiting": "A aguardar o upload da micrografia para inicializar o mapeamento..."
+        "waiting": "A aguardar o carregamento da micrografia para inicializar o mapeamento..."
     },
     "EN": {
         "title": "⚙️ OOF2 Live: ICME Architecture",
@@ -74,8 +73,6 @@ locales = {
         "waiting": "Waiting for micrograph upload to initialize mapping..."
     }
 }
-# (Reduzido a PT e EN no código de base para garantir estabilidade imediata, 
-# os outros idiomas seguem a exata mesma lógica do dicionário)
 
 # --- 3. SELEÇÃO DE IDIOMA ---
 st.sidebar.markdown("**🌐 Idioma / Language**")
@@ -118,7 +115,7 @@ if usar_jarvis:
         st.sidebar.info(f"**E0:** {e_base:.2f} GPa")
     else:
         st.sidebar.error(t["jarvis_error"])
-        e_base = 1.0 # Valor seguro para não dividir por zero
+        e_base = 1.0 # Valor seguro para evitar divisão por zero
 else:
     e_base = st.sidebar.number_input(t["custom_e"], min_value=0.1, value=114.0)
     material_nome = "Custom Input"
@@ -133,7 +130,7 @@ uploaded_file = st.file_uploader(t["upload"], type=["png", "jpg", "jpeg"])
 
 if uploaded_file is not None:
     try:
-        # Segurança: Usar Try/Except garante que se a imagem for corrompida o app não cracha
+        # Segurança: Usar Try/Except garante que se a imagem for corrompida a aplicação não bloqueia
         image = Image.open(uploaded_file)
         img_array = np.array(image.convert('RGB'))
         gray = cv2.cvtColor(img_array, cv2.COLOR_RGB2GRAY)
@@ -196,4 +193,3 @@ if uploaded_file is not None:
         st.text(traceback.format_exc())
 else:
     st.info(t["waiting"])
-```
